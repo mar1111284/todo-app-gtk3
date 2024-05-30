@@ -18,15 +18,41 @@ void on_login_button_clicked(GtkButton *button, gpointer user_data) {
 }
 
 void login_init(GtkWidget *stack) {
-    GtkBuilder *builder = gtk_builder_new_from_file("ui/login.ui");
-    GtkWidget *login_page_widget = GTK_WIDGET(gtk_builder_get_object(builder, "login_box"));
+    GtkBuilder *builder = gtk_builder_new();
+    GError *error = NULL;
+
+    if (!gtk_builder_add_from_file(builder, "ui/login.ui", &error)) {
+        g_warning("Error loading UI file: %s", error->message);
+        g_error_free(error);
+        return;
+    }
+
+    GtkWidget *login_page_widget = GTK_WIDGET(gtk_builder_get_object(builder, "login_page_grid"));
+    if (!login_page_widget) {
+        g_warning("Failed to retrieve login page widget from UI file");
+        g_object_unref(builder);
+        return;
+    }
 
     login_page.entry_username = GTK_WIDGET(gtk_builder_get_object(builder, "entry_username"));
     login_page.entry_password = GTK_WIDGET(gtk_builder_get_object(builder, "entry_password"));
+    login_page.login_label = GTK_WIDGET(gtk_builder_get_object(builder, "login_label"));
     login_page.stack = stack;
     login_page.error_label = GTK_WIDGET(gtk_builder_get_object(builder, "error_label"));
 
     GtkWidget *login_button = GTK_WIDGET(gtk_builder_get_object(builder, "login_button"));
+    if (!login_button) {
+        g_warning("Failed to retrieve login button widget from UI file");
+        g_object_unref(builder);
+        return;
+    }
+
+    // Bind the css
+    gtk_widget_set_name(GTK_WIDGET(login_page.error_label), "login-error-label");
+    gtk_widget_set_name(GTK_WIDGET(login_page.login_label), "login-label");
+    gtk_widget_set_name(GTK_WIDGET(login_button), "login-button");
+
+
     g_signal_connect(login_button, "clicked", G_CALLBACK(on_login_button_clicked), NULL);
 
     gtk_stack_add_titled(GTK_STACK(stack), login_page_widget, "login", "Login");
