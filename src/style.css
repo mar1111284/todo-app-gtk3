@@ -1,0 +1,17 @@
+/* style.css */
+window {
+    background-color: #f0f0f0;
+}
+
+label {
+    font-weight: bold;
+    font-size: 18px;
+}
+
+entry {
+    margin-bottom: 10px;
+}
+
+button {
+    margin-top: 10px;
+}

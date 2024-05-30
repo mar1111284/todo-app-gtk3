@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+  <object class="GtkBox" id="dashboard_box">
+    <property name="orientation">vertical</property>
+    <property name="spacing">10</property>
+    <child>
+      <object class="GtkLabel" id="dashboard_label">
+        <property name="label">Dashboard</property>
+      </object>
+    </child>
+  </object>
+</interface>
