@@ -1,13 +1,331 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="3.0"/>
-  <object class="GtkBox" id="dashboard_box">
-    <property name="orientation">vertical</property>
-    <property name="spacing">10</property>
+
+  <!-- Top-level GtkGrid -->
+  <object class="GtkGrid" id="dashboard_grid">
+    <property name="visible">true</property>
+    <property name="column-homogeneous">true</property>
+    <property name="row-spacing">10</property>
+    <property name="column-spacing">10</property>
+    <property name="halign">fill</property>
+    <property name="valign">fill</property>
+
+    <!-- Title -->
     <child>
       <object class="GtkLabel" id="dashboard_label">
+        <property name="visible">true</property>
         <property name="label">Dashboard</property>
+        <property name="halign">center</property>
+        <property name="margin-bottom">20</property>
+        <attributes>
+          <attribute name="weight" value="bold"/>
+          <attribute name="scale" value="1.5"/>
+        </attributes>
       </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">4</property>
+        <property name="height">1</property>
+      </packing>
     </child>
+
+    <!-- Projects Dropdown -->
+    <child>
+      <object class="GtkComboBoxText" id="projects_dropdown">
+        <property name="visible">true</property>
+        <property name="hexpand">false</property> <!-- Disable horizontal expansion -->
+        <property name="width-request">150</property> <!-- Set a fixed width -->
+        <items>
+          <item id="default" translatable="yes">Select a Project</item>
+        </items>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+
+    <!-- New Project Button -->
+    <child>
+      <object class="GtkButton" id="new_project_button">
+        <property name="visible">true</property>
+        <property name="label">New Project</property>
+        <property name="hexpand">false</property> <!-- Disable horizontal expansion -->
+        <property name="width-request">150</property> <!-- Set a fixed width -->
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">1</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+
+
+    <!-- TODO Column -->
+    <child>
+      <object class="GtkScrolledWindow" id="todo_column">
+        <property name="visible">true</property>
+        <property name="hexpand">true</property>
+        <property name="vexpand">true</property>
+        <child>
+          <object class="GtkGrid" id="todo_grid">
+            <property name="visible">true</property>
+            <property name="column-homogeneous">true</property>
+            <property name="row-spacing">10</property>
+            <property name="column-spacing">10</property>
+            <property name="halign">fill</property>
+            <property name="valign">fill</property>
+
+            <!-- Label -->
+            <child>
+              <object class="GtkLabel" id="todo_label">
+                <property name="visible">true</property>
+                <property name="label">TODO</property>
+                <property name="halign">center</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+
+            <!-- Add Button -->
+            <child>
+              <object class="GtkButton" id="add_button_todo">
+                <property name="visible">true</property>
+                <property name="hexpand">false</property> <!-- Disable horizontal expansion -->
+                <property name="width-request">8</property> <!-- Set a fixed width (1/3 of the label's width) -->
+                <property name="height-request">14</property> <!-- Set a fixed height -->
+                <child>
+                  <object class="GtkImage" id="add_image_todo">
+                    <property name="visible">true</property>
+                    <property name="file">src/images/add_icon.png</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">2</property> <!-- Adjust the position to start after the label -->
+                <property name="top_attach">0</property> <!-- Adjust the position as needed -->
+                <property name="width">1</property> <!-- Occupy 1/3 of the space -->
+                <property name="height">1</property>
+              </packing>
+            </child>
+
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+
+    <!-- IN PROGRESS Column -->
+    <child>
+      <object class="GtkScrolledWindow" id="progress_column">
+        <property name="visible">true</property>
+        <property name="hexpand">true</property>
+        <property name="vexpand">true</property>
+        <child>
+          <object class="GtkGrid" id="progress_grid">
+            <property name="visible">true</property>
+            <property name="column-homogeneous">true</property>
+            <property name="row-spacing">10</property>
+            <property name="column-spacing">10</property>
+            <property name="halign">fill</property>
+            <property name="valign">fill</property>
+
+            <!-- Label -->
+            <child>
+              <object class="GtkLabel" id="in_progress_label">
+                <property name="visible">true</property>
+                <property name="label">IN PROGRESS</property>
+                <property name="halign">center</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">2</property> <!-- Adjust the width to occupy 2/3 of the space -->
+                <property name="height">1</property>
+              </packing>
+            </child>
+
+            <!-- Add Button -->
+            <child>
+              <object class="GtkButton" id="add_button_progress">
+                <property name="visible">true</property>
+                <property name="hexpand">false</property> <!-- Disable horizontal expansion -->
+                <property name="width-request">8</property> <!-- Set a fixed width (1/3 of the label's width) -->
+                <property name="height-request">14</property> <!-- Set a fixed height -->
+                <child>
+                  <object class="GtkImage" id="add_image_progress">
+                    <property name="visible">true</property>
+                    <property name="file">src/images/add_icon.png</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">2</property> <!-- Adjust the position to start after the label -->
+                <property name="top_attach">0</property> <!-- Adjust the position as needed -->
+                <property name="width">1</property> <!-- Occupy 1/3 of the space -->
+                <property name="height">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+
+    <!-- PENDING Column -->
+    <child>
+      <object class="GtkScrolledWindow" id="pending_column">
+        <property name="visible">true</property>
+        <property name="hexpand">true</property>
+        <property name="vexpand">true</property>
+        <child>
+          <object class="GtkGrid" id="pending_grid">
+            <property name="visible">true</property>
+            <property name="column-homogeneous">true</property>
+            <property name="row-spacing">10</property>
+            <property name="column-spacing">10</property>
+            <property name="halign">fill</property>
+            <property name="valign">fill</property>
+
+            <!-- Label -->
+            <child>
+              <object class="GtkLabel" id="pending_label">
+                <property name="visible">true</property>
+                <property name="label">PENDING</property>
+                <property name="halign">center</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">2</property> <!-- Adjust the width to occupy 2/3 of the space -->
+                <property name="height">1</property>
+              </packing>
+            </child>
+
+            <!-- Add Button -->
+            <child>
+              <object class="GtkButton" id="add_button_pending">
+                <property name="visible">true</property>
+                <property name="hexpand">false</property> <!-- Disable horizontal expansion -->
+                <property name="width-request">8</property> <!-- Set a fixed width (1/3 of the label's width) -->
+                <property name="height-request">14</property> <!-- Set a fixed height -->
+                <child>
+                  <object class="GtkImage" id="add_image_pending">
+                    <property name="visible">true</property>
+                    <property name="file">src/images/add_icon.png</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">2</property> <!-- Adjust the position to start after the label -->
+                <property name="top_attach">0</property> <!-- Adjust the position as needed -->
+                <property name="width">1</property> <!-- Occupy 1/3 of the space -->
+                <property name="height">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">2</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+
+    <!-- DONE Column -->
+    <child>
+      <object class="GtkScrolledWindow" id="done_column">
+        <property name="visible">true</property>
+        <property name="hexpand">true</property>
+        <property name="vexpand">true</property>
+        <child>
+          <object class="GtkGrid" id="done_grid">
+            <property name="visible">true</property>
+            <property name="column-homogeneous">true</property>
+            <property name="row-spacing">10</property>
+            <property name="column-spacing">10</property>
+            <property name="halign">fill</property>
+            <property name="valign">fill</property>
+
+            <!-- Label -->
+            <child>
+              <object class="GtkLabel" id="done_label">
+                <property name="visible">true</property>
+                <property name="label">DONE</property>
+                <property name="halign">center</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">2</property> <!-- Adjust the width to occupy 2/3 of the space -->
+                <property name="height">1</property>
+              </packing>
+            </child>
+
+            <!-- Add Button -->
+            <child>
+              <object class="GtkButton" id="add_button_done">
+                <property name="visible">true</property>
+                <property name="hexpand">false</property> <!-- Disable horizontal expansion -->
+                <property name="width-request">8</property> <!-- Set a fixed width (1/3 of the label's width) -->
+                <property name="height-request">14</property> <!-- Set a fixed height -->
+                <child>
+                  <object class="GtkImage" id="add_image_done">
+                    <property name="visible">true</property>
+                    <property name="file">src/images/add_icon.png</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="left_attach">2</property> <!-- Adjust the position to start after the label -->
+                <property name="top_attach">0</property> <!-- Adjust the position as needed -->
+                <property name="width">1</property> <!-- Occupy 1/3 of the space -->
+                <property name="height">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">3</property>
+        <property name="top_attach">2</property>
+        <property name="width">1</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+
   </object>
 </interface>

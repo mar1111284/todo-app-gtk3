@@ -30,7 +30,39 @@
   cursor: pointer;
 }
   
-  .button:hover {
-    background-color: #0056b3;
-  }
+.button:hover {
+  background-color: #0056b3;
+}
+
+#dashboard-grid {
+  margin: 50px;
+  /* background-color: red; */
+}
+
+/* #dashboard-label{
+  background-color: green;
+} */
+
+#todo-column, #progress-column, #pending-column, #done-column{
+  background-color: whitesmoke;
+  border: 1px dashed #4d4c4c;
+  border-radius: 6px;
+  padding: 10px;
+}
+
+#new-project-button{
+  background-color: #007bff;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#add-button-todo, #add-button-progress, #add-button-pending, #add-button-done{
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  width: 20px;
+}
   
