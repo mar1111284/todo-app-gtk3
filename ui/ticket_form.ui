@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  
+  <!-- Main Vertical Box to hold everything -->
+  <object class="GtkBox" id="main_vertical_box">
+    <property name="visible">True</property>
+    <property name="orientation">vertical</property>
+    <property name="halign">center</property>
+    <property name="valign">center</property>
+    <property name="spacing">20</property>
+    
+    <!-- Inner Box for Centering Content -->
+    <child>
+      <object class="GtkBox" id="centered_box">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        
+        <!-- Ticket Form Grid -->
+        <child>
+          <object class="GtkGrid" id="ticket_form_grid">
+            <property name="visible">True</property>
+            <property name="column_homogeneous">True</property>
+            <property name="row_spacing">10</property>
+            <property name="column_spacing">10</property>
+
+            <!-- Page Title -->
+            <child>
+              <object class="GtkLabel" id="dashboard_label">
+                <property name="visible">true</property>
+                <property name="label">Create a ticket</property>
+                <property name="halign">center</property>
+                <property name="margin-bottom">20</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                  <attribute name="scale" value="1.5"/>
+                </attributes>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">0</property>
+                <property name="width">4</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            
+
+            <!-- Title ticket entry -->
+            <child>
+              <object class="GtkEntry" id="ticket_title_entry">
+                <property name="visible">True</property>
+                <property name="placeholder-text">Enter Title...</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+                <property name="width">4</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            
+            
+            <!-- Ticket Description -->
+            <child>
+              <object class="GtkTextView" id="ticket_description_textview">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+                <property name="width">4</property>
+                <property name="height">2</property>
+              </packing>
+            </child>
+
+            <!-- Ticket Priority -->
+            <child>
+              <object class="GtkComboBoxText" id="ticket_priority_combobox">
+                <property name="visible">True</property>
+                <items>
+                  <item id="high">High</item>
+                  <item id="medium">Medium</item>
+                  <item id="low">Low</item>
+                </items>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">4</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            
+            <!-- Ticket Status -->
+            <child>
+              <object class="GtkComboBoxText" id="ticket_status_combobox">
+                <property name="visible">True</property>
+                <items>
+                  <item id="todo">TODO</item>
+                  <item id="in_progress">In Progress</item>
+                  <item id="pending">Pending</item>
+                  <item id="done">Done</item>
+                </items>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">4</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            
+            <!-- Ticket Start Date (auto-filled) -->
+            <child>
+              <object class="GtkLabel" id="ticket_start_date_label">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">5</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            
+            <!-- Ticket Deadline -->
+            <child>
+              <object class="GtkEntry" id="ticket_deadline_entry">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">5</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+
+            <!-- Ticket Owner -->
+            <child>
+              <object class="GtkEntry" id="ticket_owner_entry">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">6</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            
+            
+            <!-- Submit Button -->
+            <child>
+              <object class="GtkButton" id="submit_ticket_button">
+                <property name="label">Submit</property>
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">6</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.0"/>
+
+  <!-- Single Ticket -->
+  <object class="GtkGrid" id="ticket_grid">
+    <property name="visible">true</property>
+    <property name="row-spacing">5</property>
+    <property name="column-spacing">5</property>
+    <property name="halign">fill</property>
+    <property name="valign">fill</property>
+    
+    <!-- Cross Icon -->
+    <child>
+      <object class="GtkButton" id="ticket_cross_button">
+        <property name="visible">true</property>
+        <property name="relief">none</property>
+        <property name="halign">end</property>
+        <child>
+          <object class="GtkImage" id="cross_image">
+            <property name="visible">true</property>
+            <property name="file">src/images/cross_icon.png</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">0</property>
+        <property name="width">3</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+
+    <!-- Ticket Name -->
+    <child>
+      <object class="GtkLabel" id="ticket_name_label">
+        <property name="visible">true</property>
+        <property name="halign">start</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">1</property>
+        <property name="width">3</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+
+    <!-- Ticket Status -->
+    <child>
+      <object class="GtkLabel" id="ticket_status_label">
+        <property name="visible">true</property>
+        <property name="halign">start</property>
+      </object>
+      <packing>
+        <property name="left_attach">0</property>
+        <property name="top_attach">2</property>
+        <property name="width">3</property>
+        <property name="height">1</property>
+      </packing>
+    </child>
+  </object>
+</interface>

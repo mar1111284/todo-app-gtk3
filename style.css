@@ -65,4 +65,27 @@
   border-radius: 4px;
   width: 20px;
 }
+
+.ticket-box {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px;
+  background-color: #f9f9f9;
+}
+
+.ticket-title {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 5px;
+}
+
+.ticket-description {
+  margin-bottom: 10px;
+}
+
+.ticket-button {
+  margin: 2px;
+}
+
   

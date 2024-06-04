@@ -2,6 +2,19 @@
 
 static DashboardPage dashboard_page;
 
+
+void on_add_button_clicked(GtkButton *button, gpointer user_data) {
+    GtkWidget *stack = GTK_WIDGET(user_data);
+
+    // Switch to the ticket form page
+    gtk_stack_set_visible_child_name(GTK_STACK(stack), "ticket_form");
+
+    // Optional: Print a message to the console to indicate which button was clicked
+    const char *button_name = gtk_widget_get_name(GTK_WIDGET(button));
+    g_print("Add button clicked: %s\n", button_name);
+}
+
+
 void on_new_project_button_clicked(GtkButton *button, gpointer user_data) {
     // Handle new project button click
     g_print("New project button clicked\n");
@@ -46,10 +59,6 @@ void dashboard_init(GtkWidget *stack) {
     dashboard_page.add_button_pending = GTK_WIDGET(gtk_builder_get_object(builder, "add_button_pending"));
     dashboard_page.add_button_done = GTK_WIDGET(gtk_builder_get_object(builder, "add_button_done"));
 
-
-
-
-
     dashboard_page.stack = stack;
 
     if (!dashboard_page.new_project_button) {
@@ -60,7 +69,7 @@ void dashboard_init(GtkWidget *stack) {
 
     // Bind the CSS
     gtk_widget_set_name(GTK_WIDGET(dashboard_page.dashboard_label), "dashboard-label");
-    gtk_widget_set_name(GTK_WIDGET( dashboard_page.dashboard_grid), "dashboard-grid");
+    gtk_widget_set_name(GTK_WIDGET(dashboard_page.dashboard_grid), "dashboard-grid");
     gtk_widget_set_name(GTK_WIDGET(dashboard_page.todo_label), "todo-label");
     gtk_widget_set_name(GTK_WIDGET(dashboard_page.in_progress_label), "in-progress-label");
     gtk_widget_set_name(GTK_WIDGET(dashboard_page.pending_label), "pending-label");
@@ -79,8 +88,12 @@ void dashboard_init(GtkWidget *stack) {
     gtk_widget_set_name(GTK_WIDGET(dashboard_page.add_button_pending), "add-button-pending");
     gtk_widget_set_name(GTK_WIDGET(dashboard_page.add_button_done), "add-button-done");
 
-    // Button event
+    // Button events
     g_signal_connect(dashboard_page.new_project_button, "clicked", G_CALLBACK(on_new_project_button_clicked), NULL);
+    g_signal_connect(dashboard_page.add_button_todo, "clicked", G_CALLBACK(on_add_button_clicked), stack);
+    g_signal_connect(dashboard_page.add_button_progress, "clicked", G_CALLBACK(on_add_button_clicked), stack);
+    g_signal_connect(dashboard_page.add_button_pending, "clicked", G_CALLBACK(on_add_button_clicked), stack);
+    g_signal_connect(dashboard_page.add_button_done, "clicked", G_CALLBACK(on_add_button_clicked), stack);
 
     gtk_stack_add_titled(GTK_STACK(stack), dashboard_page_widget, "dashboard", "Dashboard");
     g_object_unref(builder);

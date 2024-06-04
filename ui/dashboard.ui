@@ -72,6 +72,8 @@
         <property name="visible">true</property>
         <property name="hexpand">true</property>
         <property name="vexpand">true</property>
+        <property name="hscrollbar-policy">GTK_POLICY_NEVER</property> <!-- Disable horizontal scrolling -->
+        <property name="vscrollbar-policy">GTK_POLICY_AUTOMATIC</property> <!-- Enable vertical scrolling automatically -->
         <child>
           <object class="GtkGrid" id="todo_grid">
             <property name="visible">true</property>
@@ -103,9 +105,9 @@
             <child>
               <object class="GtkButton" id="add_button_todo">
                 <property name="visible">true</property>
-                <property name="hexpand">false</property> <!-- Disable horizontal expansion -->
-                <property name="width-request">8</property> <!-- Set a fixed width (1/3 of the label's width) -->
-                <property name="height-request">14</property> <!-- Set a fixed height -->
+                <property name="hexpand">false</property>
+                <property name="width-request">8</property>
+                <property name="height-request">14</property>
                 <child>
                   <object class="GtkImage" id="add_image_todo">
                     <property name="visible">true</property>
@@ -114,13 +116,12 @@
                 </child>
               </object>
               <packing>
-                <property name="left_attach">2</property> <!-- Adjust the position to start after the label -->
-                <property name="top_attach">0</property> <!-- Adjust the position as needed -->
-                <property name="width">1</property> <!-- Occupy 1/3 of the space -->
+                <property name="left_attach">2</property>
+                <property name="top_attach">0</property>
+                <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
             </child>
-
           </object>
         </child>
       </object>
@@ -131,6 +132,7 @@
         <property name="height">1</property>
       </packing>
     </child>
+
 
     <!-- IN PROGRESS Column -->
     <child>
