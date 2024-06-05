@@ -18,9 +18,9 @@
         <property name="halign">center</property>
         <property name="valign">center</property>
         
-        <!-- Ticket Form Grid -->
+        <!-- Ticket Form Page Grid -->
         <child>
-          <object class="GtkGrid" id="ticket_form_grid">
+          <object class="GtkGrid" id="page_grid">
             <property name="visible">True</property>
             <property name="column_homogeneous">True</property>
             <property name="row_spacing">10</property>
@@ -28,7 +28,7 @@
 
             <!-- Page Title -->
             <child>
-              <object class="GtkLabel" id="dashboard_label">
+              <object class="GtkLabel" id="page_label">
                 <property name="visible">true</property>
                 <property name="label">Create a ticket</property>
                 <property name="halign">center</property>

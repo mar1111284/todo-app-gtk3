@@ -1,13 +1,20 @@
 # TODO APP C Programming / Gtk3-lib
 
-## Summary
+### Summary
 
-1 - The Project Structure
-2 - The Stack Structure 
-3 - The Pages Structure
-4 - Database implementation
+1. **Project Structure**
+   - Overview of folders and files.
+   
+2. **Stack Structure**
+   - Usage of `GtkStack` for managing different pages.
+   
+3. **Pages Structure**
+   - How different pages (login, dashboard, etc.) are organized and initialized.
+   
+4. **Database Implementation**
+   - Integration with SQLite for storing todo items.
 
-## Introduction
+### Introduction
 
 Welcome to my Todo App! This project is a simple yet functional Todo application developed using the C programming language and the GTK3 library, with CSS for styling.
 
@@ -16,7 +23,7 @@ C programming provides fine-grained control over system resources and memory man
 
 The GTK3 library is a versatile toolkit for creating graphical user interfaces (GUIs) on Linux. It offers a comprehensive set of widgets and tools to build sophisticated applications. Leveraging GTK3, I aimed to create a modern and responsive user interface for my Todo App.
 
-## The Project Structure
+### Project Structure
 
 Here is an overview of the project structure:
 
@@ -34,7 +41,7 @@ Here is an overview of the project structure:
 
 ```
 
-## The Stack structure
+### Stack Structure
 
 The application uses GtkStack to manage different pages within the main window. This allows seamless navigation between different sections of the app, such as the login page, dashboard, and ticket form.
 
@@ -95,6 +102,7 @@ void login_init(GtkWidget *stack) {
 
 **When the login button is clicked, the on_login_button_clicked() function handles the event, switching to the dashboard page if the login is successful:**
 
+```
 void on_login_button_clicked(GtkButton *button, gpointer user_data) {
     const char *username = gtk_entry_get_text(GTK_ENTRY(login_page.entry_username));
     const char *password = gtk_entry_get_text(GTK_ENTRY(login_page.entry_password));
@@ -105,30 +113,193 @@ void on_login_button_clicked(GtkButton *button, gpointer user_data) {
         gtk_label_set_text(GTK_LABEL(login_page.error_label), "Invalid username or password");
     }
 }
+```
 
 By using GtkStack, the application maintains a clean and organized structure, allowing easy navigation and modularity. Each page can be independently developed and managed, ensuring a scalable and maintainable codebase.
 
-## The Page structure 
+### Page Structure
 
+Let's see how it works by coding example of the Ticket Form page, users can create new tickets by providing various details. Let's delve into how this page is implemented:
 
+The Ticket Form page is an essential component of the Todo App, facilitating the creation of new tasks. It's meticulously structured to ensure a seamless user experience. Here's a breakdown of its implementation:
 
-in the header folder we create a structure to keep track of every entry, and label to access it more easely (get value, apply style
-etc..)
+#### Header file
 
-by example:
+In the header file, we define the structure TicketFormPage to encapsulate UI widgets specific to the Ticket Form page. This abstraction promotes modularity and ease of maintenance.
 
+```
+#ifndef TICKET_FORM_H
+#define TICKET_FORM_H
+
+#include <gtk/gtk.h>
+
+// Structure to hold UI widgets
 typedef struct {
     GtkWidget *page_label;
     GtkGrid *page_grid;
     GtkWidget *entry_title;
     GtkWidget *entry_description;
+    GtkWidget *entry_priority;
+    GtkWidget *entry_status;
+    GtkWidget *entry_start_date;
+    GtkWidget *entry_deadline_date;
+    GtkWidget *entry_owner;
     GtkWidget *stack;
     GtkWidget *error_label;
     GtkWidget *submit_btn;
-
 } TicketFormPage;
 
-Here we have the page wo contain the ticket form
+void ticket_form_init(GtkWidget *stack);
+
+#endif // TICKET_FORM_H
+
+```
+
+#### Builder file
+
+The UI file (ticket_form.ui) defines the visual layout of the Ticket Form page using GtkBuilder. It includes widgets like entry fields, labels, and buttons arranged in a grid to facilitate user interaction. This UI file defines the layout of the ticket form page using GtkBuilder. It includes widgets for entering ticket details like title, description, priority, status, start date, deadline, owner, and a submit button.
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk+" version="3.20"/>
+  
+  <!-- Main Vertical Box to hold everything -->
+  <object class="GtkBox" id="main_vertical_box">
+    <property name="visible">True</property>
+    <property name="orientation">vertical</property>
+    <property name="halign">center</property>
+    <property name="valign">center</property>
+    <property name="spacing">20</property>
+    
+    <!-- Inner Box for Centering Content -->
+    <child>
+      <object class="GtkBox" id="centered_box">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <property name="halign">center</property>
+        <property name="valign">center</property>
+        
+        <!-- Ticket Form Grid -->
+        <child>
+          <object class="GtkGrid" id="ticket_form_grid">
+            <property name="visible">True</property>
+            <property name="column_homogeneous">True</property>
+            <property name="row_spacing">10</property>
+            <property name="column_spacing">10</property>
+
+            <!-- Page Title -->
+            <child>
+              <object class="GtkLabel" id="dashboard_label">
+                <!-- Properties omitted for brevity -->
+              </object>
+              <packing>
+                <!-- Properties omitted for brevity -->
+              </packing>
+            </child>
+
+            <!-- Title ticket entry -->
+            <child>
+              <object class="GtkEntry" id="ticket_title_entry">
+                <!-- Properties omitted for brevity -->
+              </object>
+              <packing>
+                <!-- Properties omitted for brevity -->
+              </packing>
+            </child>
+
+            <!-- Other entry fields and widgets -->
+            <!-- ... -->
+
+            <!-- Submit Button -->
+            <child>
+              <object class="GtkButton" id="submit_ticket_button">
+                <!-- Properties omitted for brevity -->
+              </object>
+              <packing>
+                <!-- Properties omitted for brevity -->
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
+
+```
+
+The layout is achieved using a GtkGrid container, which arranges its children in rows and columns. Each child widget is packed into the grid with specific parameters like position and size, ensuring a well-organized and user-friendly interface.
+
+#### Ticket_form.c
+
+In ticket_form_init(), we initialize the ticket form page by loading the UI file, filling the TicketFormPage structure with UI widgets, setting the current date to the start date label, and adding the page to the stack.
+
+```
+#include "../include/ticket_form.h"
+#include <gtk/gtk.h>
+#include <time.h>
+
+static TicketFormPage ticket_form_page;
+
+void ticket_form_init(GtkWidget *stack) {
+    // Initialize GtkBuilder
+    GtkBuilder *builder = gtk_builder_new();
+    GError *error = NULL;
+
+    // Load UI file
+    if (!gtk_builder_add_from_file(builder, "ui/ticket_form.ui", &error)) {
+        g_warning("Error loading UI file: %s", error->message);
+        g_error_free(error);
+        return;
+    }
+
+    // Fill structure with UI widgets
+    ticket_form_page.stack = stack;
+    ticket_form_page.page_grid = GTK_WIDGET(gtk_builder_get_object(builder, "page_grid"));
+    ticket_form_page.page_label = GTK_WIDGET(gtk_builder_get_object(builder, "page_label"));
+    ticket_form_page.entry_title = GTK_WIDGET(gtk_builder_get_object(builder, "ticket_title_entry"));
+    ticket_form_page.error_label = GTK_WIDGET(gtk_builder_get_object(builder, "error_label"));
+    //...
+
+    // Get current date and set to start date label
+    GtkWidget *start_date_label = GTK_WIDGET(gtk_builder_get_object(builder, "ticket_start_date_label"));
+    //...
+
+    // Add the page to the stack
+    GtkWidget *ticket_form_page = GTK_WIDGET(gtk_builder_get_object(builder, "main_vertical_box"));
+    gtk_stack_add_titled(GTK_STACK(stack), ticket_form_page, "ticket_form", "Ticket Form");
+
+    // Cleanup
+    g_object_unref(builder);
+}
+
+```
+
+#### Applying CSS
+
+To apply CSS to the ticket form page, we can target specific widgets or classes within the page's UI. For example:
+
+```
+/* Example CSS for ticket form page */
+#page_label {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#ticket_title_entry,
+#ticket_description_textview,
+#ticket_priority_combobox,
+#ticket_status_combobox,
+#ticket_deadline_entry,
+#ticket_owner_entry {
+    width: 300px;
+}
+
+```
+
+By example this CSS snippet applies styles to the page label and various entry fields on the ticket form page, ensuring a consistent and visually appealing layout.
+
 
 ![alt text](https://i.imgur.com/3drVIr7.jpeg)
 
