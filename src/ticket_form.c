@@ -4,40 +4,53 @@
 
 static TicketFormPage ticket_form_page;
 
+// Function to handle submit button click event
+static void on_submit_button_clicked(GtkButton *button, gpointer user_data) {
+    GtkWidget *stack = GTK_WIDGET(user_data);
+
+    // Switch to the ticket form page
+    gtk_stack_set_visible_child_name(GTK_STACK(stack), "dashboard");
+    g_print("Submit button clicked\n");
+    // Additional logic to handle form submission can be added here
+}
+
 void ticket_form_init(GtkWidget *stack) {
     GtkBuilder *builder = gtk_builder_new();
     GError *error = NULL;
 
-    // Check for 
     if (!gtk_builder_add_from_file(builder, "ui/ticket_form.ui", &error)) {
         g_warning("Error loading UI file: %s", error->message);
         g_error_free(error);
         return;
     }
 
-    // Fill structure 
+    // Fill structure
     ticket_form_page.stack = stack;
-    ticket_form_page.page_grid = GTK_WIDGET(gtk_builder_get_object(builder, "page_grid"));
-    ticket_form_page.page_label= GTK_WIDGET(gtk_builder_get_object(builder, "page_label"));
+    ticket_form_page.page_grid = GTK_GRID(gtk_builder_get_object(builder, "ticket_form_grid"));
+    ticket_form_page.page_label = GTK_WIDGET(gtk_builder_get_object(builder, "dashboard_label"));
     ticket_form_page.entry_title = GTK_WIDGET(gtk_builder_get_object(builder, "ticket_title_entry"));
+    ticket_form_page.entry_description = GTK_WIDGET(gtk_builder_get_object(builder, "ticket_description_textview"));
+    ticket_form_page.entry_priority = GTK_WIDGET(gtk_builder_get_object(builder, "ticket_priority_combobox"));
+    ticket_form_page.entry_status = GTK_WIDGET(gtk_builder_get_object(builder, "ticket_status_combobox"));
+    ticket_form_page.entry_start_date = GTK_WIDGET(gtk_builder_get_object(builder, "ticket_start_date_label"));
+    ticket_form_page.entry_deadline_date = GTK_WIDGET(gtk_builder_get_object(builder, "ticket_deadline_entry"));
+    ticket_form_page.entry_owner = GTK_WIDGET(gtk_builder_get_object(builder, "ticket_owner_entry"));
     ticket_form_page.error_label = GTK_WIDGET(gtk_builder_get_object(builder, "error_label"));
-
-    // ... Please chat gpt continue the work here, i missed lot of things hehe
-
-    GtkWidget *ticket_form_page = GTK_WIDGET(gtk_builder_get_object(builder, "main_vertical_box"));
-    GtkWidget *start_date_label = GTK_WIDGET(gtk_builder_get_object(builder, "ticket_start_date_label"));
-    GtkWidget *submit_button = GTK_WIDGET(gtk_builder_get_object(builder, "submit_ticket_button"));
+    ticket_form_page.submit_btn = GTK_WIDGET(gtk_builder_get_object(builder, "submit_ticket_button"));
 
     // Set current date to the start_date_label
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
     char date_str[100];
     strftime(date_str, sizeof(date_str) - 1, "%Y-%m-%d", t);
-    gtk_label_set_text(GTK_LABEL(start_date_label), date_str);
+    gtk_label_set_text(GTK_LABEL(ticket_form_page.entry_start_date), date_str);
 
-    // Optionally connect the submit button to a signal handler
-    // g_signal_connect(submit_button, "clicked", G_CALLBACK(on_submit_ticket_button_clicked), stack);
+    // Connect the submit button clicked signal to the handler
+    g_signal_connect(ticket_form_page.submit_btn, "clicked", G_CALLBACK(on_submit_button_clicked), NULL);
 
-    gtk_stack_add_titled(GTK_STACK(stack), ticket_form_page, "ticket_form", "Ticket Form");
+    // Add the page to the stack
+    GtkWidget *ticket_form_page_widget = GTK_WIDGET(gtk_builder_get_object(builder, "main_vertical_box"));
+    gtk_stack_add_titled(GTK_STACK(stack), ticket_form_page_widget, "ticket_form", "Ticket Form");
+
     g_object_unref(builder);
 }
