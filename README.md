@@ -14,6 +14,8 @@
 4. **Database Implementation**
    - Integration with SQLite for storing todo items.
 
+5. **Screenshots**
+
 ### Introduction
 
 Welcome to my Todo App! This project is a simple yet functional Todo application developed using the C programming language and the GTK3 library, with CSS for styling.
@@ -300,10 +302,10 @@ To apply CSS to the ticket form page, we can target specific widgets or classes 
 
 By example this CSS snippet applies styles to the page label and various entry fields on the ticket form page, ensuring a consistent and visually appealing layout.
 
+### ScreenShots
 
-![alt text](https://i.imgur.com/3drVIr7.jpeg)
+![alt text](https://i.imgur.com/1CAUj21.jpeg)
 
+![alt text](https://i.imgur.com/53uayvq.jpeg)
 
-![alt text](https://i.imgur.com/DtwrIra.jpeg)
-
-
+![alt text](https://i.imgur.com/cKai0aE.jpeg)

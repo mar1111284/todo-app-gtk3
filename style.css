@@ -1,8 +1,8 @@
 /* styles.css */
 #login-grid {
-  background: white;
+  background: whiteSmoke;
   padding: 50px;
-  border-radius: 6px;
+  border-radius: 8px;
 }
 #entry {
     padding: 6px;
@@ -37,6 +37,7 @@
 #page-grid {
   background-color: white;
   padding: 50px;
+  border-radius: 8px;
 }
   
 #login-button, #submit-btn{
@@ -57,9 +58,9 @@
   /* background-color: red; */
 }
 
-/* #dashboard-label{
-  background-color: green;
-} */
+#dashboard-label{
+  color: white;
+}
 
 #todo-column, #progress-column, #pending-column, #done-column{
   background-color: whitesmoke;
@@ -104,6 +105,13 @@
 
 .ticket-button {
   margin: 2px;
+}
+
+#main_window {
+  /* background-color: lightblue; */
+  background-image: url("./src/images/bg.jpg"); /* Path to your background image */
+  background-size: cover; /* Adjust as needed */
+  background-repeat: no-repeat; /* Adjust as needed */
 }
 
 
