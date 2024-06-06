@@ -33,7 +33,7 @@
       <object class="GtkEntry" id="entry_username">
         <property name="visible">true</property>
         <property name="placeholder-text">Username</property>
-        <property name="width-request">300</property> <!-- Increase entry width -->
+        <property name="width-request">325</property> <!-- Increase entry width -->
       </object>
       <packing>
         <property name="left_attach">0</property>

@@ -4,11 +4,18 @@
   background: linear-gradient(0deg, rgba(26,42,75,1) 0%, rgba(0,0,0,1) 100%);
 }
 #entry {
-    padding: 10px;
+    padding: 6px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
   }
+
+#entry_description {
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
 
 #login-label {
   color: rgb(33,33,33);
@@ -22,7 +29,7 @@
 }
   
 #login-button {
-  padding: 8px 12px;
+  padding: 6px 12px;
   background-color: #007bff;
   color: #fff;
   border: none;
@@ -86,6 +93,14 @@
 
 .ticket-button {
   margin: 2px;
+}
+
+
+/* Ticket form page */
+
+#ticket-form-description {
+  width: 500px;
+  height: 400px;
 }
 
   

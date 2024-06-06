@@ -57,6 +57,10 @@ void login_init(GtkWidget *stack) {
     gtk_widget_set_name(GTK_WIDGET(login_page.error_label), "login-error-label");
     gtk_widget_set_name(GTK_WIDGET(login_page.login_label), "login-label");
     gtk_widget_set_name(GTK_WIDGET(login_button), "login-button");
+    gtk_widget_set_name(GTK_WIDGET(login_page.entry_username) , "entry");
+    gtk_widget_set_name(GTK_WIDGET(login_page.entry_password) , "entry");
+
+
 
     g_signal_connect(login_button, "clicked", G_CALLBACK(on_login_button_clicked), NULL);
 

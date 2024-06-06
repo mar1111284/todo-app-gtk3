@@ -45,6 +45,23 @@ void ticket_form_init(GtkWidget *stack) {
     strftime(date_str, sizeof(date_str) - 1, "%Y-%m-%d", t);
     gtk_label_set_text(GTK_LABEL(ticket_form_page.entry_start_date), date_str);
 
+    // Bind the CSS
+    gtk_widget_set_name(GTK_WIDGET(ticket_form_page.entry_title), "entry");
+    gtk_widget_set_name(GTK_WIDGET(ticket_form_page.entry_description), "entry_description");
+
+    // Create a text buffer with placeholder text for the description text view
+    GtkTextBuffer *buffer = gtk_text_buffer_new(NULL);
+    gtk_text_buffer_set_text(buffer, "Enter description here...", -1);
+    gtk_text_view_set_buffer(GTK_TEXT_VIEW(ticket_form_page.entry_description), buffer);
+
+    // Add placeholder and items to the priority combobox
+    gtk_combo_box_text_insert_text(GTK_COMBO_BOX_TEXT(ticket_form_page.entry_priority), 0, "Select Priority");
+    gtk_combo_box_text_insert_text(GTK_COMBO_BOX_TEXT(ticket_form_page.entry_status), 0, "Select Status");
+
+    // Set the placeholder as the active item
+    gtk_combo_box_set_active(GTK_COMBO_BOX(ticket_form_page.entry_priority), 0);
+    gtk_combo_box_set_active(GTK_COMBO_BOX(ticket_form_page.entry_status), 0);
+
     // Connect the submit button clicked signal to the handler
     g_signal_connect(ticket_form_page.submit_btn, "clicked", G_CALLBACK(on_submit_button_clicked), NULL);
 
