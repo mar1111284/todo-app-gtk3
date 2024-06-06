@@ -1,7 +1,8 @@
 /* styles.css */
-#login_grid {
-  background: rgb(26,42,75);
-  background: linear-gradient(0deg, rgba(26,42,75,1) 0%, rgba(0,0,0,1) 100%);
+#login-grid {
+  background: white;
+  padding: 50px;
+  border-radius: 6px;
 }
 #entry {
     padding: 6px;
@@ -10,16 +11,21 @@
     font-size: 14px;
   }
 
-#entry_description {
+#entry-description-container {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  }
+#entry-description {
   padding: 6px;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 6px;
   font-size: 14px;
 }
 
 #login-label {
   color: rgb(33,33,33);
   font-size: 30px;
+  border-radius: 8px;
   /* letter-spacing: 1px; */
 }
 
@@ -27,14 +33,19 @@
   color: red;
   /* letter-spacing: 1px; */
 }
+
+#page-grid {
+  background-color: white;
+  padding: 50px;
+}
   
-#login-button {
+#login-button, #submit-btn{
   padding: 6px 12px;
   background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
+  /* cursor: pointer;kkk */
 }
   
 .button:hover {
@@ -63,14 +74,14 @@
   color: #fff;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 #add-button-todo, #add-button-progress, #add-button-pending, #add-button-done{
   border: none;
   background: transparent;
   border-radius: 4px;
-  width: 20px;
+  /* width: 20px; */
 }
 
 .ticket-box {
@@ -97,10 +108,3 @@
 
 
 /* Ticket form page */
-
-#ticket-form-description {
-  width: 500px;
-  height: 400px;
-}
-
-  

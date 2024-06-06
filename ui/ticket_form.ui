@@ -66,8 +66,8 @@
             
             <!-- Ticket Description -->
             <child>
-              <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
+              <object class="GtkScrolledWindow" id="ticket_description_textview_container">
+                <property name="visible">False</property>
                 <child>
                   <object class="GtkViewport">
                     <property name="visible">True</property>
@@ -79,14 +79,14 @@
                     </child>
                   </object>
                 </child>
-                <property name="min-content-height">300</property>
+                <property name="min-content-height">400</property>
                 <property name="min-content-width">300</property>
               </object>
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">2</property>
                 <property name="width">6</property>
-                <property name="height">6</property>
+                <property name="height">10</property>
               </packing>
             </child>
 
@@ -103,7 +103,7 @@
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">8</property>
+                <property name="top_attach">12</property>
                 <property name="width">3</property>
                 <property name="height">1</property>
               </packing>
@@ -122,7 +122,7 @@
               </object>
               <packing>
                 <property name="left_attach">3</property>
-                <property name="top_attach">8</property>
+                <property name="top_attach">12</property>
                 <property name="width">3</property>
                 <property name="height">1</property>
               </packing>
@@ -130,13 +130,13 @@
 
             <!-- Ticket Start Date -->
             <child>
-              <object class="GtkEntry" id="ticket_start_date_entry">
+              <object class="GtkLabel" id="ticket_start_date_label">
                 <property name="visible">True</property>
-                <property name="editable">False</property>
+                <property name="label">YYYY-MM-DD</property> <!-- Set an initial label -->
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">9</property>
+                <property name="top_attach">13</property>
                 <property name="width">2</property>
                 <property name="height">1</property>
               </packing>
@@ -144,11 +144,11 @@
             <child>
               <object class="GtkButton" id="ticket_start_date_button">
                 <property name="visible">True</property>
-                <property name="label">Select Start Date</property>
+                <property name="label">Start date</property>
               </object>
               <packing>
                 <property name="left_attach">2</property>
-                <property name="top_attach">9</property>
+                <property name="top_attach">13</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
@@ -156,13 +156,13 @@
 
             <!-- Ticket Deadline -->
             <child>
-              <object class="GtkEntry" id="ticket_deadline_entry">
+              <object class="GtkLabel" id="ticket_deadline_label">
                 <property name="visible">True</property>
-                <property name="editable">False</property>
+                <property name="label">YYYY-MM-DD</property> <!-- Set an initial label -->
               </object>
               <packing>
                 <property name="left_attach">3</property>
-                <property name="top_attach">9</property>
+                <property name="top_attach">13</property>
                 <property name="width">2</property>
                 <property name="height">1</property>
               </packing>
@@ -174,26 +174,33 @@
               </object>
               <packing>
                 <property name="left_attach">5</property>
-                <property name="top_attach">9</property>
+                <property name="top_attach">13</property>
                 <property name="width">1</property>
                 <property name="height">1</property>
               </packing>
             </child>
 
 
+
             <!-- Ticket Owner -->
             <child>
-              <object class="GtkEntry" id="ticket_owner_entry">
+              <object class="GtkComboBoxText" id="ticket_owner_combobox">
                 <property name="visible">True</property>
+                <items>
+                  <item id="owner1">Owner 1</item>
+                  <item id="owner2">Owner 2</item>
+                  <item id="owner3">Owner 3</item>
+                  <!-- Add more owners as needed -->
+                </items>
               </object>
               <packing>
                 <property name="left_attach">0</property>
-                <property name="top_attach">10</property>
+                <property name="top_attach">14</property>
                 <property name="width">3</property>
                 <property name="height">1</property>
               </packing>
             </child>
-            
+                        
             
             <!-- Submit Button -->
             <child>
@@ -203,7 +210,7 @@
               </object>
               <packing>
                 <property name="left_attach">3</property>
-                <property name="top_attach">10</property>
+                <property name="top_attach">14</property>
                 <property name="width">3</property>
                 <property name="height">1</property>
               </packing>

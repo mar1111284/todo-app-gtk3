@@ -43,6 +43,7 @@ void login_init(GtkWidget *stack) {
     login_page.entry_username = GTK_WIDGET(gtk_builder_get_object(builder, "entry_username"));
     login_page.entry_password = GTK_WIDGET(gtk_builder_get_object(builder, "entry_password"));
     login_page.login_label = GTK_WIDGET(gtk_builder_get_object(builder, "login_label"));
+    login_page.login_grid = GTK_GRID(gtk_builder_get_object(builder, "login_page_grid"));
     login_page.stack = stack;
     login_page.error_label = GTK_WIDGET(gtk_builder_get_object(builder, "error_label"));
 
@@ -54,6 +55,7 @@ void login_init(GtkWidget *stack) {
     }
 
     // Bind the css
+    gtk_widget_set_name(GTK_WIDGET(login_page.login_grid), "login-grid");
     gtk_widget_set_name(GTK_WIDGET(login_page.error_label), "login-error-label");
     gtk_widget_set_name(GTK_WIDGET(login_page.login_label), "login-label");
     gtk_widget_set_name(GTK_WIDGET(login_button), "login-button");

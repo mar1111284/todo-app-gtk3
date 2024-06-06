@@ -4,20 +4,29 @@
 #include <gtk/gtk.h>
 
 typedef struct {
-    GtkWidget *page_label;
+    int year;
+    int month;
+    int day;
+} SelectedDate;
+
+typedef struct {
+    GtkWidget *stack;
     GtkGrid *page_grid;
+    GtkWidget *page_label;
     GtkWidget *entry_title;
+    GtkWidget *ticket_description_textview_container;
     GtkWidget *entry_description;
     GtkWidget *entry_priority;
     GtkWidget *entry_status;
-    GtkWidget *entry_start_date;
-    GtkWidget *entry_deadline_date;
+    SelectedDate start_date; // Store the selected start date
+    SelectedDate deadline_date; // Store the selected deadline date
     GtkWidget *entry_owner;
-    GtkWidget *stack;
     GtkWidget *error_label;
     GtkWidget *submit_btn;
-
+    GtkWidget *start_date_label; // Label for displaying the start date
+    GtkWidget *deadline_date_label; // Label for displaying the deadline date
 } TicketFormPage;
+
 
 void ticket_form_init(GtkWidget *stack);
 
