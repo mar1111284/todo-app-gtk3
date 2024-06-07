@@ -344,6 +344,14 @@ By example this CSS snippet applies styles to the page label and various entry f
 | deadline_date   | TEXT    | Deadline date of the ticket          |
 | register_date   | TEXT    | Date when the ticket was registered  |
 
+#### User_projects (many-many relation)
+
+| Column    | Type    | Description                    |
+|-----------|---------|--------------------------------|
+| user_id   | INTEGER | User ID from the `users` table |
+| project_id| INTEGER | Project ID from the `projects` table |
+
+
 
 ### ScreenShots
 
