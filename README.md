@@ -302,6 +302,49 @@ To apply CSS to the ticket form page, we can target specific widgets or classes 
 
 By example this CSS snippet applies styles to the page label and various entry fields on the ticket form page, ensuring a consistent and visually appealing layout.
 
+### Database implementation
+
+#### Table User
+
+| Column          | Type    | Description                          |
+|-----------------|---------|--------------------------------------|
+| id              | INTEGER | Primary key                          |
+| username        | TEXT    | Username of the user                 |
+| password        | TEXT    | Password of the user                 |
+| email           | TEXT    | Email address of the user            |
+| register_date   | TEXT    | Date when the user registered        |
+| role            | TEXT    | Role of the user (e.g., admin, user) |
+
+
+#### Table project
+
+| Column          | Type    | Description                          |
+|-----------------|---------|--------------------------------------|
+| id              | INTEGER | Primary key                          |
+| title           | TEXT    | Title of the project                 |
+| description     | TEXT    | Description of the project           |
+| start_date      | TEXT    | Start date of the project            |
+| deadline_date   | TEXT    | Deadline date of the project         |
+| register_date   | TEXT    | Date when the project was registered |
+| project_leader  | INTEGER | User ID of the project leader        |
+
+
+#### Table ticket
+
+| Column          | Type    | Description                          |
+|-----------------|---------|--------------------------------------|
+| id              | INTEGER | Primary key                          |
+| title           | TEXT    | Title of the ticket                  |
+| description     | TEXT    | Description of the ticket            |
+| priority        | TEXT    | Priority of the ticket               |
+| status          | TEXT    | Status of the ticket                 |
+| owner           | INTEGER | User ID of the ticket owner          |
+| project_id      | INTEGER | Project ID to which the ticket belongs|
+| start_date      | TEXT    | Start date of the ticket             |
+| deadline_date   | TEXT    | Deadline date of the ticket          |
+| register_date   | TEXT    | Date when the ticket was registered  |
+
+
 ### ScreenShots
 
 ![alt text](https://i.imgur.com/1CAUj21.jpeg)
