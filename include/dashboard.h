@@ -19,6 +19,12 @@ typedef struct {
     GtkWidget *pending_column;
     GtkWidget *done_column;
 
+    // Container
+    GtkWidget *todo_ticket_container;
+    GtkWidget *progress_ticket_container;
+    GtkWidget *pending_ticket_container;
+    GtkWidget *done_ticket_container;
+
     // Button
     GtkWidget *new_project_button;
     GtkWidget *add_button_todo;

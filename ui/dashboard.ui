@@ -122,6 +122,21 @@
                 <property name="height">1</property>
               </packing>
             </child>
+
+            <!-- Ticket Container -->
+            <child>
+              <object class="GtkBox" id="todo_ticket_container">
+                <property name="visible">true</property>
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property> <!-- Vertical box -->
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property> <!-- Below the label and add button -->
+                <property name="width">3</property> <!-- Span across all columns -->
+                <property name="height">1</property>
+              </packing>
+            </child>
+
           </object>
         </child>
       </object>
@@ -188,6 +203,21 @@
                 <property name="height">1</property>
               </packing>
             </child>
+
+            <!-- Ticket Container -->
+            <child>
+              <object class="GtkBox" id="progress_ticket_container">
+                <property name="visible">true</property>
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property> <!-- Vertical box -->
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property> <!-- Below the label and add button -->
+                <property name="width">3</property> <!-- Span across all columns -->
+                <property name="height">1</property>
+              </packing>
+            </child>
+
           </object>
         </child>
       </object>
@@ -253,6 +283,21 @@
                 <property name="height">1</property>
               </packing>
             </child>
+
+            <!-- Ticket Container -->
+            <child>
+              <object class="GtkBox" id="pending_ticket_container">
+                <property name="visible">true</property>
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property> <!-- Vertical box -->
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property> <!-- Below the label and add button -->
+                <property name="width">3</property> <!-- Span across all columns -->
+                <property name="height">1</property>
+              </packing>
+            </child>
+
           </object>
         </child>
       </object>
@@ -318,6 +363,21 @@
                 <property name="height">1</property>
               </packing>
             </child>
+
+            <!-- Ticket Container -->
+            <child>
+              <object class="GtkBox" id="done_ticket_container">
+                <property name="visible">true</property>
+                <property name="orientation">GTK_ORIENTATION_VERTICAL</property> <!-- Vertical box -->
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property> <!-- Below the label and add button -->
+                <property name="width">3</property> <!-- Span across all columns -->
+                <property name="height">1</property>
+              </packing>
+            </child>
+
           </object>
         </child>
       </object>

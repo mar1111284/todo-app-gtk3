@@ -129,8 +129,10 @@ int initialize_database() {
     }
 
     const char *sql_insert_tickets = "INSERT INTO tickets (title, description, priority, status, owner_id, project_id, start_date, deadline, register_date) VALUES "
-                                     "('Ticket 1', 'Description of Ticket 1', 'High', 'TODO', 1, 1, '2023-01-01', '2023-06-30', '2023-01-01'), "
-                                     "('Ticket 2', 'Description of Ticket 2', 'Medium', 'In Progress', 2, 2, '2023-02-01', '2023-07-31', '2023-02-01');";
+        "('Update contact form validation', 'Update the validation logic for the contact form fields', 'Medium', 'TODO', 3, 3, '2023-03-01', '2023-08-31', '2023-03-01'), "
+        "('Optimize database queries', 'Optimize the database queries to improve performance', 'High', 'In Progress', 4, 4, '2023-04-01', '2023-09-30', '2023-04-01'), "
+        "('Refactor user authentication', 'Refactor the user authentication module for better security', 'High', 'Pending', 5, 5, '2023-05-01', '2023-10-31', '2023-05-01'), "
+        "('Add pagination to product listing', 'Implement pagination feature for product listing page', 'Medium', 'TODO', 6, 6, '2023-06-01', '2023-11-30', '2023-06-01');";
 
     rc = sqlite3_exec(db, sql_insert_tickets, 0, 0, &errmsg);
     if (rc != SQLITE_OK) {
@@ -208,4 +210,71 @@ Project* fetch_all_projects(int* num_projects) {
 
 void free_projects(Project* projects, int num_projects) {
     free(projects);
+}
+
+Ticket* fetch_tickets_by_project_id(int project_id, int *num_tickets) {
+    sqlite3 *db;
+    sqlite3_stmt *stmt;
+    int rc;
+
+    *num_tickets = 0;
+    rc = sqlite3_open("app.db", &db);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return NULL;
+    }
+
+    const char *sql = "SELECT id, title, description, priority, status, owner_id, project_id, start_date, deadline, register_date FROM tickets WHERE project_id = ?";
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, 0);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to fetch tickets: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return NULL;
+    }
+
+    sqlite3_bind_int(stmt, 1, project_id);
+
+    Ticket *tickets = NULL;
+    int capacity = 10;
+    tickets = malloc(capacity * sizeof(Ticket));
+    if (!tickets) {
+        fprintf(stderr, "Out of memory\n");
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+        return NULL;
+    }
+
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        if (*num_tickets >= capacity) {
+            capacity *= 2;
+            tickets = realloc(tickets, capacity * sizeof(Ticket));
+            if (!tickets) {
+                fprintf(stderr, "Out of memory\n");
+                sqlite3_finalize(stmt);
+                sqlite3_close(db);
+                return NULL;
+            }
+        }
+
+        tickets[*num_tickets].id = sqlite3_column_int(stmt, 0);
+        strncpy(tickets[*num_tickets].title, (const char*)sqlite3_column_text(stmt, 1), sizeof(tickets[*num_tickets].title));
+        strncpy(tickets[*num_tickets].description, (const char*)sqlite3_column_text(stmt, 2), sizeof(tickets[*num_tickets].description));
+        strncpy(tickets[*num_tickets].priority, (const char*)sqlite3_column_text(stmt, 3), sizeof(tickets[*num_tickets].priority));
+        strncpy(tickets[*num_tickets].status, (const char*)sqlite3_column_text(stmt, 4), sizeof(tickets[*num_tickets].status));
+        tickets[*num_tickets].owner_id = sqlite3_column_int(stmt, 5);
+        tickets[*num_tickets].project_id = sqlite3_column_int(stmt, 6);
+        strncpy(tickets[*num_tickets].start_date, (const char*)sqlite3_column_text(stmt, 7), sizeof(tickets[*num_tickets].start_date));
+        strncpy(tickets[*num_tickets].deadline, (const char*)sqlite3_column_text(stmt, 8), sizeof(tickets[*num_tickets].deadline));
+        strncpy(tickets[*num_tickets].register_date, (const char*)sqlite3_column_text(stmt, 9), sizeof(tickets[*num_tickets].register_date));
+
+        (*num_tickets)++;
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+    return tickets;
+}
+
+void free_tickets(Ticket *tickets) {
+    free(tickets);
 }
