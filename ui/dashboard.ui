@@ -37,9 +37,9 @@
         <property name="visible">true</property>
         <property name="hexpand">false</property> <!-- Disable horizontal expansion -->
         <property name="width-request">150</property> <!-- Set a fixed width -->
-        <items>
+        <!-- <items>
           <item id="default" translatable="yes">Select a Project</item>
-        </items>
+        </items> -->
       </object>
       <packing>
         <property name="left_attach">0</property>

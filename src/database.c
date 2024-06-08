@@ -1,5 +1,9 @@
 #include <sqlite3.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
 #include "../include/database.h"
 
 int initialize_database() {
@@ -151,4 +155,57 @@ int initialize_database() {
 
     sqlite3_close(db);
     return SQLITE_OK;
+}
+
+Project* fetch_all_projects(int* num_projects) {
+    sqlite3 *db;
+    int rc;
+    sqlite3_stmt *stmt;
+    Project *projects = NULL;
+
+    rc = sqlite3_open("app.db", &db);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return NULL;
+    }
+
+    const char *sql = "SELECT id, title, description, start_date, deadline, register_date, leader_id FROM projects;";
+
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return NULL;
+    }
+
+    int count = 0;
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        count++;
+    }
+
+    *num_projects = count;
+    projects = malloc(count * sizeof(Project));
+
+    sqlite3_reset(stmt);
+
+    count = 0;
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        projects[count].id = sqlite3_column_int(stmt, 0);
+        strncpy(projects[count].title, (const char*)sqlite3_column_text(stmt, 1), sizeof(projects[count].title) - 1);
+        strncpy(projects[count].description, (const char*)sqlite3_column_text(stmt, 2), sizeof(projects[count].description) - 1);
+        strncpy(projects[count].start_date, (const char*)sqlite3_column_text(stmt, 3), sizeof(projects[count].start_date) - 1);
+        strncpy(projects[count].deadline, (const char*)sqlite3_column_text(stmt, 4), sizeof(projects[count].deadline) - 1);
+        strncpy(projects[count].register_date, (const char*)sqlite3_column_text(stmt, 5), sizeof(projects[count].register_date) - 1);
+        projects[count].leader_id = sqlite3_column_int(stmt, 6);
+        count++;
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+
+    return projects;
+}
+
+void free_projects(Project* projects, int num_projects) {
+    free(projects);
 }
