@@ -1,4 +1,5 @@
 #include "../include/login.h"
+#include "../include/database.h"
 
 static LoginPage login_page;
 
@@ -12,14 +13,20 @@ void on_login_button_clicked(GtkButton *button, gpointer user_data) {
     GtkWidget *error_label = login_page.error_label;
 
     if (g_strcmp0(username, "") != 0 && g_strcmp0(password, "") != 0) {
-        gtk_stack_set_visible_child_name(GTK_STACK(stack), "dashboard");
-        gtk_label_set_text(GTK_LABEL(error_label), "");
+        // Query the database to check if the user exists
+        int user_id = validate_user_credentials(username, password);
+        
+        if (user_id != -1) {
+            gtk_stack_set_visible_child_name(GTK_STACK(stack), "dashboard");
+            gtk_label_set_text(GTK_LABEL(error_label), "");
+        } else {
+            gtk_label_set_text(GTK_LABEL(error_label), "Invalid username or password");
+            gtk_widget_set_visible(error_label, TRUE);
+        }
     } else {
-        gtk_label_set_text(GTK_LABEL(error_label), "Invalid username or password");
+        gtk_label_set_text(GTK_LABEL(error_label), "Username and password cannot be empty");
         gtk_widget_set_visible(error_label, TRUE);
     }
-
-    // Note: Database not implemented here
 }
 
 void login_init(GtkWidget *stack) {
@@ -61,8 +68,6 @@ void login_init(GtkWidget *stack) {
     gtk_widget_set_name(GTK_WIDGET(login_button), "login-button");
     gtk_widget_set_name(GTK_WIDGET(login_page.entry_username) , "entry");
     gtk_widget_set_name(GTK_WIDGET(login_page.entry_password) , "entry");
-
-
 
     g_signal_connect(login_button, "clicked", G_CALLBACK(on_login_button_clicked), NULL);
 

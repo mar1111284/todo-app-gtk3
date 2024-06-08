@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <glib.h>
 
 
 #include "../include/database.h"
@@ -129,8 +130,8 @@ int initialize_database() {
     }
 
     const char *sql_insert_tickets = "INSERT INTO tickets (title, description, priority, status, owner_id, project_id, start_date, deadline, register_date) VALUES "
-        "('Update contact form validation', 'Update the validation logic for the contact form fields', 'Medium', 'TODO', 3, 3, '2023-03-01', '2023-08-31', '2023-03-01'), "
-        "('Optimize database queries', 'Optimize the database queries to improve performance', 'High', 'In Progress', 4, 4, '2023-04-01', '2023-09-30', '2023-04-01'), "
+        "('Update contact form validation', 'Update the validation logic for the contact form fields', 'Medium', 'TODO', 3, 1, '2023-03-01', '2023-08-31', '2023-03-01'), "
+        "('Optimize database queries', 'Optimize the database queries to improve performance', 'High', 'In Progress', 4, 2, '2023-04-01', '2023-09-30', '2023-04-01'), "
         "('Refactor user authentication', 'Refactor the user authentication module for better security', 'High', 'Pending', 5, 5, '2023-05-01', '2023-10-31', '2023-05-01'), "
         "('Add pagination to product listing', 'Implement pagination feature for product listing page', 'Medium', 'TODO', 6, 6, '2023-06-01', '2023-11-30', '2023-06-01');";
 
@@ -159,6 +160,51 @@ int initialize_database() {
     return SQLITE_OK;
 }
 
+int validate_user_credentials(const char *username, const char *password) {
+    sqlite3 *db;
+    sqlite3_stmt *stmt;
+    int user_id = -1;
+
+    // Open the database
+    if (sqlite3_open("app.db", &db) != SQLITE_OK) {
+        g_warning("Cannot open database: %s", sqlite3_errmsg(db));
+        return -1;
+    }
+
+    // Prepare the SQL query
+    const char *sql = "SELECT id, password FROM users WHERE username = ?";
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        g_warning("Failed to prepare statement: %s", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return -1;
+    }
+
+    // Bind the username to the query
+    if (sqlite3_bind_text(stmt, 1, username, -1, SQLITE_STATIC) != SQLITE_OK) {
+        g_warning("Failed to bind username: %s", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+        return -1;
+    }
+
+    // Execute the query
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        const char *db_password = (const char *)sqlite3_column_text(stmt, 1);
+        if (g_strcmp0(password, db_password) == 0) {
+            user_id = sqlite3_column_int(stmt, 0);
+        } else {
+            g_warning("Password mismatch for user: %s", username);
+        }
+    } else {
+        g_warning("No user found with username: %s", username);
+    }
+
+    // Clean up
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+
+    return user_id;
+}
 Project* fetch_all_projects(int* num_projects) {
     sqlite3 *db;
     int rc;

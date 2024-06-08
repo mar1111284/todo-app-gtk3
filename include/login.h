@@ -2,6 +2,7 @@
 #define LOGIN_H
 
 #include <gtk/gtk.h>
+#include <string.h>
 
 typedef struct {
     GtkWidget *login_label;

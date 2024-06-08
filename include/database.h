@@ -27,7 +27,7 @@ typedef struct {
 int initialize_database();
 Project* fetch_all_projects(int *num_projects);
 void free_projects(Project *projects, int num_projects);
-
+int validate_user_credentials(const char *username, const char *password);
 Ticket* fetch_tickets_by_project_id(int project_id, int *num_tickets);
 void free_tickets(Ticket *tickets);
 
