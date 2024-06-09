@@ -7,6 +7,96 @@
 
 #include "../include/database.h"
 
+// New function to insert a project
+int insert_project(const char *title, const char *description, int leader_id, const char *start_date, const char *deadline) {
+    sqlite3 *db;
+    char *errmsg = 0;
+    int rc;
+    char sql[1024];
+
+    // Open the database
+    rc = sqlite3_open("app.db", &db);
+    if (rc) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return rc;
+    }
+    printf("Database opened successfully.\n");
+
+    // SQL statement to insert a project
+    snprintf(sql, sizeof(sql),
+        "INSERT INTO projects (title, description, start_date, deadline, register_date, leader_id) "
+        "VALUES ('%s', '%s', '%s', '%s', date('now'), %d)",
+        title, description, start_date, deadline, leader_id);
+    printf("SQL Query: %s\n", sql);
+
+    // Execute the SQL statement
+    rc = sqlite3_exec(db, sql, 0, 0, &errmsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", errmsg);
+        sqlite3_free(errmsg);
+        sqlite3_close(db);
+        return rc;
+    }
+    printf("Project inserted successfully.\n");
+
+    // Close the database
+    sqlite3_close(db);
+    printf("Database closed.\n");
+
+    return rc;
+}
+
+// New function to fetch all leader names
+char** fetch_all_leader_names(int* num_leaders) {
+    sqlite3 *db;
+    int rc;
+    sqlite3_stmt *stmt;
+
+    rc = sqlite3_open("app.db", &db);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return NULL;
+    }
+
+    const char *sql = "SELECT username FROM users WHERE role = 'leader';";
+
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return NULL;
+    }
+
+    char** leader_names = NULL;
+    int count = 0;
+
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        if (!leader_names) {
+            leader_names = malloc(sizeof(char*));
+        } else {
+            leader_names = realloc(leader_names, (count + 1) * sizeof(char*));
+        }
+
+        if (!leader_names) {
+            fprintf(stderr, "Out of memory\n");
+            sqlite3_finalize(stmt);
+            sqlite3_close(db);
+            return NULL;
+        }
+
+        leader_names[count] = strdup((const char*)sqlite3_column_text(stmt, 0));
+        count++;
+    }
+
+    *num_leaders = count;
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+
+    return leader_names;
+}
+
+
 // Function to print every ticket with its associated project ID and name
 void print_tickets_with_projects() {
     sqlite3 *db;
@@ -459,3 +549,35 @@ Ticket* fetch_tickets_by_project_id(int project_id, int *num_tickets) {
 void free_tickets(Ticket *tickets) {
     free(tickets);
 }
+
+int get_leader_id_by_name(const char *leader_name) {
+    int leader_id = -1;
+    sqlite3 *db;
+    sqlite3_stmt *stmt;
+    int rc;
+    const char *sql = "SELECT id FROM leaders WHERE name = ?";
+
+    // Open the database connection (assuming `db_open` is a function that opens the database)
+    rc = sqlite3_open("app.db", &db);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+    }
+
+    // Prepare the SQL statement
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK) {
+        // Bind the leader name to the SQL statement
+        sqlite3_bind_text(stmt, 1, leader_name, -1, SQLITE_STATIC);
+
+        // Execute the statement and fetch the result
+        if (sqlite3_step(stmt) == SQLITE_ROW) {
+            leader_id = sqlite3_column_int(stmt, 0);
+        }
+    }
+
+    // Finalize the statement and close the database connection
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+
+    return leader_id;
+}
+

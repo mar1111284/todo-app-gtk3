@@ -1,4 +1,5 @@
 #include "../include/dashboard.h"
+#include "../include/project_form.h"
 #include "../include/database.h"
 
 static DashboardPage dashboard_page;
@@ -42,11 +43,34 @@ void on_add_button_clicked(GtkButton *button, gpointer user_data) {
     const char *button_name = gtk_widget_get_name(GTK_WIDGET(button));
     g_print("Add button clicked: %s\n", button_name);
 }
-
 void on_new_project_button_clicked(GtkButton *button, gpointer user_data) {
-    // Handle new project button click
+    // Print the value of user_data to debug
+    g_print("User data pointer: %p\n", user_data);
+
+    // Assuming user_data is a GtkWidget pointer
+    GtkWidget *stack = GTK_WIDGET(user_data);
+
+    // Check if stack is a GtkStack widget
+    if (!GTK_IS_STACK(stack)) {
+        g_warning("User data is not a GtkStack widget");
+        return;
+    }
+
+    // Set the visible child name
+    gtk_stack_set_visible_child_name(GTK_STACK(stack), "project");
+
+    // Check if the operation was successful
+    const gchar *current_page = gtk_stack_get_visible_child_name(GTK_STACK(stack));
+    if (g_strcmp0(current_page, "project") != 0) {
+        g_warning("Failed to switch to the project form page. Current page: %s", current_page);
+        return;
+    }
+    
     g_print("New project button clicked\n");
 }
+
+
+
 
 void on_project_selected(GtkComboBox *widget, gpointer user_data) {
     GtkComboBoxText *dropdown = GTK_COMBO_BOX_TEXT(widget);
@@ -183,7 +207,6 @@ void dashboard_init(GtkWidget *stack) {
     gtk_widget_set_name(GTK_WIDGET(dashboard_page.add_button_done), "add-button-done");
 
     // Button events
-    g_signal_connect(dashboard_page.new_project_button, "clicked", G_CALLBACK(on_new_project_button_clicked), NULL);
     g_signal_connect(dashboard_page.add_button_todo, "clicked", G_CALLBACK(on_add_button_clicked), stack);
     g_signal_connect(dashboard_page.add_button_progress, "clicked", G_CALLBACK(on_add_button_clicked), stack);
     g_signal_connect(dashboard_page.add_button_pending, "clicked", G_CALLBACK(on_add_button_clicked), stack);
@@ -208,6 +231,9 @@ void dashboard_init(GtkWidget *stack) {
 
     // Project selection event
     g_signal_connect(dashboard_page.projects_dropdown, "changed", G_CALLBACK(on_project_selected), NULL);
+    // Button events
+    g_signal_connect(dashboard_page.new_project_button, "clicked", G_CALLBACK(on_new_project_button_clicked), stack);
+
 
     gtk_stack_add_titled(GTK_STACK(stack), dashboard_page_widget, "dashboard", "Dashboard");
     g_object_unref(builder);

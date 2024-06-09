@@ -4,6 +4,8 @@
 #include "../include/login.h"
 #include "../include/dashboard.h"
 #include "../include/ticket_form.h"
+#include "../include/project_form.h"
+
 
 int main(int argc, char *argv[]) {
 
@@ -34,6 +36,8 @@ int main(int argc, char *argv[]) {
     login_init(stack);
     dashboard_init(stack);
     ticket_form_init(stack);
+    project_form_init(stack);
+
 
     /* Load CSS */
     GtkCssProvider *provider = gtk_css_provider_new();

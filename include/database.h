@@ -34,5 +34,8 @@ int insert_ticket(const char *title, const char *description, const char *priori
 char** fetch_all_project_names(int* num_projects);
 int get_project_id(const char *project_name);
 void print_tickets_with_projects();
+int insert_project(const char *title, const char *description, int leader_id, const char *start_date, const char *deadline);
+int get_leader_id_by_name(const char *leader_name); // Add this function prototype
+
 
 #endif // DATABASE_H

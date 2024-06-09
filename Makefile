@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = `pkg-config --cflags gtk+-3.0`
 LIBS = `pkg-config --libs gtk+-3.0` -lsqlite3
-SRC = src/main.c src/database.c src/login.c src/dashboard.c src/ticket_form.c
+SRC = src/main.c src/database.c src/login.c src/dashboard.c src/ticket_form.c src/project_form.c
 OBJ_DIR = obj
 OBJS = $(SRC:src/%.c=$(OBJ_DIR)/%.o)
 

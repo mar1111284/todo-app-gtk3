@@ -1,5 +1,7 @@
 # TODO APP C Programming / Gtk3-lib
 
+## Create modern GUI app using C programming ?
+
 ### Summary
 
 1. **Project Structure**
@@ -16,6 +18,7 @@
 
 5. **Features Implementation & code**
    - Integration of core features.
+
 6. **Screenshots**
 
 ### Introduction
@@ -352,6 +355,9 @@ By example this CSS snippet applies styles to the page label and various entry f
 |-----------|---------|--------------------------------|
 | user_id   | INTEGER | User ID from the `users` table |
 | project_id| INTEGER | Project ID from the `projects` table |
+
+
+### Features implementation 
 
 
 
