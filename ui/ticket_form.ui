@@ -200,7 +200,23 @@
                 <property name="height">1</property>
               </packing>
             </child>
-                        
+
+            <!-- Project ID Entry -->
+            <child>
+              <object class="GtkComboBoxText" id="ticket_project_combobox">
+                <property name="visible">True</property>
+                <items>
+                  <!-- Add more projects as needed -->
+                </items>
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">14</property>
+                <property name="width">3</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+ 
             
             <!-- Submit Button -->
             <child>
@@ -210,7 +226,7 @@
               </object>
               <packing>
                 <property name="left_attach">3</property>
-                <property name="top_attach">14</property>
+                <property name="top_attach">15</property>
                 <property name="width">3</property>
                 <property name="height">1</property>
               </packing>

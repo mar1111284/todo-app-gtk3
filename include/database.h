@@ -30,5 +30,9 @@ void free_projects(Project *projects, int num_projects);
 int validate_user_credentials(const char *username, const char *password);
 Ticket* fetch_tickets_by_project_id(int project_id, int *num_tickets);
 void free_tickets(Ticket *tickets);
+int insert_ticket(const char *title, const char *description, const char *priority, const char *status, const char *owner, const char *start_date, const char *deadline, int project_id);
+char** fetch_all_project_names(int* num_projects);
+int get_project_id(const char *project_name);
+void print_tickets_with_projects();
 
 #endif // DATABASE_H

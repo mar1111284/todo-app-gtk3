@@ -7,6 +7,174 @@
 
 #include "../include/database.h"
 
+// Function to print every ticket with its associated project ID and name
+void print_tickets_with_projects() {
+    sqlite3 *db;
+    sqlite3_stmt *stmt;
+    const char *sql = "SELECT t.id, t.title AS ticket_title, t.project_id, p.title AS project_title FROM tickets t INNER JOIN projects p ON t.project_id = p.id";
+    
+    // Open the database
+    if (sqlite3_open("app.db", &db) != SQLITE_OK) {
+        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+        return;
+    }
+
+    // Prepare the SQL query
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        fprintf(stderr, "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return;
+    }
+
+    // Execute the query and print the results
+    printf("Tickets with associated project ID and name:\n");
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        int ticket_id = sqlite3_column_int(stmt, 0);
+        const char *ticket_title = (const char *)sqlite3_column_text(stmt, 1);
+        int project_id = sqlite3_column_int(stmt, 2);
+        const char *project_title = (const char *)sqlite3_column_text(stmt, 3);
+
+        printf("Ticket ID: %d, Ticket Title: %s, Project ID: %d, Project Title: %s\n", ticket_id, ticket_title, project_id, project_title);
+    }
+
+    // Finalize statement and close the database
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+}
+
+// Function to retrieve the project ID based on its name
+int get_project_id(const char *project_name) {
+    sqlite3 *db;
+    sqlite3_stmt *stmt;
+    int project_id = -1;
+
+    // Open the database
+    if (sqlite3_open("app.db", &db) != SQLITE_OK) {
+        g_warning("Cannot open database: %s", sqlite3_errmsg(db));
+        return -1;
+    }
+
+    // Prepare the SQL query
+    const char *sql = "SELECT id FROM projects WHERE title = ?";
+    if (sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) != SQLITE_OK) {
+        g_warning("Failed to prepare statement: %s", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return -1;
+    }
+
+    // Bind the project name to the query
+    if (sqlite3_bind_text(stmt, 1, project_name, -1, SQLITE_STATIC) != SQLITE_OK) {
+        g_warning("Failed to bind project name: %s", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+        return -1;
+    }
+
+    // Execute the query
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        project_id = sqlite3_column_int(stmt, 0);
+    } else {
+        g_warning("No project found with name: %s", project_name);
+    }
+
+    // Clean up
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+
+    return project_id;
+}
+
+
+char** fetch_all_project_names(int* num_projects) {
+    sqlite3 *db;
+    int rc;
+    sqlite3_stmt *stmt;
+
+    rc = sqlite3_open("app.db", &db);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return NULL;
+    }
+
+    const char *sql = "SELECT title FROM projects;";
+
+    rc = sqlite3_prepare_v2(db, sql, -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
+        sqlite3_close(db);
+        return NULL;
+    }
+
+    char** project_names = NULL;
+    int count = 0;
+
+    while ((rc = sqlite3_step(stmt)) == SQLITE_ROW) {
+        if (!project_names) {
+            project_names = malloc(sizeof(char*));
+        } else {
+            project_names = realloc(project_names, (count + 1) * sizeof(char*));
+        }
+
+        if (!project_names) {
+            fprintf(stderr, "Out of memory\n");
+            sqlite3_finalize(stmt);
+            sqlite3_close(db);
+            return NULL;
+        }
+
+        project_names[count] = strdup((const char*)sqlite3_column_text(stmt, 0));
+        count++;
+    }
+
+    *num_projects = count;
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+
+    return project_names;
+}
+
+
+// Function to insert a ticket into the database
+int insert_ticket(const char *title, const char *description, const char *priority, const char *status, const char *owner, const char *start_date, const char *deadline, int project_id) {
+    sqlite3 *db;
+    char *errmsg = 0;
+    int rc;
+    char sql[1024];
+
+    // Open the database
+    rc = sqlite3_open("app.db", &db);
+    if (rc) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return rc;
+    }
+    printf("Database opened successfully.\n");
+
+    // SQL statement to insert a ticket
+    snprintf(sql, sizeof(sql),
+        "INSERT INTO tickets (title, description, priority, status, owner_id, project_id, start_date, deadline, register_date) "
+        "VALUES ('%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', date('now'))",
+        title, description, priority, status, owner, project_id, start_date, deadline);
+    printf("SQL Query: %s\n", sql);
+
+    // Execute the SQL statement
+    rc = sqlite3_exec(db, sql, 0, 0, &errmsg);
+    if (rc != SQLITE_OK) {
+        fprintf(stderr, "SQL error: %s\n", errmsg);
+        sqlite3_free(errmsg);
+        sqlite3_close(db);
+        return rc;
+    }
+    printf("Ticket inserted successfully.\n");
+
+    // Close the database
+    sqlite3_close(db);
+    printf("Database closed.\n");
+
+    return rc;
+}
+
+
 int initialize_database() {
     sqlite3 *db;
     int rc;
@@ -17,148 +185,114 @@ int initialize_database() {
         return rc;
     }
 
-    // Drop existing tables if they exist
-    const char *sql_drop_tables = "DROP TABLE IF EXISTS users; "
-                                  "DROP TABLE IF EXISTS projects; "
-                                  "DROP TABLE IF EXISTS tickets; "
-                                  "DROP TABLE IF EXISTS user_projects;";
-
-    char *errmsg;
-    rc = sqlite3_exec(db, sql_drop_tables, 0, 0, &errmsg);
+    // Check if tables already exist
+    int tables_exist = 0;
+    const char *sql_check_tables = "SELECT count(*) FROM sqlite_master WHERE type='table';";
+    sqlite3_stmt *stmt;
+    rc = sqlite3_prepare_v2(db, sql_check_tables, -1, &stmt, NULL);
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error dropping tables: %s\n", errmsg);
-        sqlite3_free(errmsg);
+        fprintf(stderr, "Failed to prepare statement: %s\n", sqlite3_errmsg(db));
         sqlite3_close(db);
         return rc;
     }
-
-    // Create new tables
-    const char *sql_users = "CREATE TABLE IF NOT EXISTS users ("
-                            "id INTEGER PRIMARY KEY, "
-                            "username TEXT, "
-                            "password TEXT, "
-                            "email TEXT, "
-                            "register_date TEXT, "
-                            "role TEXT);";
-
-    const char *sql_projects = "CREATE TABLE IF NOT EXISTS projects ("
-                               "id INTEGER PRIMARY KEY, "
-                               "title TEXT, "
-                               "description TEXT, "
-                               "start_date TEXT, "
-                               "deadline TEXT, "
-                               "register_date TEXT, "
-                               "leader_id INTEGER, "
-                               "FOREIGN KEY(leader_id) REFERENCES users(id));";
-
-    const char *sql_tickets = "CREATE TABLE IF NOT EXISTS tickets ("
-                              "id INTEGER PRIMARY KEY, "
-                              "title TEXT, "
-                              "description TEXT, "
-                              "priority TEXT, "
-                              "status TEXT, "
-                              "owner_id INTEGER, "
-                              "project_id INTEGER, "
-                              "start_date TEXT, "
-                              "deadline TEXT, "
-                              "register_date TEXT, "
-                              "FOREIGN KEY(owner_id) REFERENCES users(id), "
-                              "FOREIGN KEY(project_id) REFERENCES projects(id));";
-
-    const char *sql_user_projects = "CREATE TABLE IF NOT EXISTS user_projects ("
-                                    "user_id INTEGER, "
-                                    "project_id INTEGER, "
-                                    "FOREIGN KEY(user_id) REFERENCES users(id), "
-                                    "FOREIGN KEY(project_id) REFERENCES projects(id), "
-                                    "PRIMARY KEY(user_id, project_id));";
-
-    rc = sqlite3_exec(db, sql_users, 0, 0, &errmsg);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error creating users table: %s\n", errmsg);
-        sqlite3_free(errmsg);
-        sqlite3_close(db);
-        return rc;
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        tables_exist = sqlite3_column_int(stmt, 0);
     }
+    sqlite3_finalize(stmt);
 
-    rc = sqlite3_exec(db, sql_projects, 0, 0, &errmsg);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error creating projects table: %s\n", errmsg);
-        sqlite3_free(errmsg);
-        sqlite3_close(db);
-        return rc;
-    }
+    // Drop and create tables only if they don't exist
+    if (!tables_exist) {
+        const char *sql_drop_tables = "DROP TABLE IF EXISTS users; "
+                                      "DROP TABLE IF EXISTS projects; "
+                                      "DROP TABLE IF EXISTS tickets; "
+                                      "DROP TABLE IF EXISTS user_projects;";
 
-    rc = sqlite3_exec(db, sql_tickets, 0, 0, &errmsg);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error creating tickets table: %s\n", errmsg);
-        sqlite3_free(errmsg);
-        sqlite3_close(db);
-        return rc;
-    }
+        char *errmsg;
+        rc = sqlite3_exec(db, sql_drop_tables, 0, 0, &errmsg);
+        if (rc != SQLITE_OK) {
+            fprintf(stderr, "SQL error dropping tables: %s\n", errmsg);
+            sqlite3_free(errmsg);
+            sqlite3_close(db);
+            return rc;
+        }
 
-    rc = sqlite3_exec(db, sql_user_projects, 0, 0, &errmsg);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error creating user_projects table: %s\n", errmsg);
-        sqlite3_free(errmsg);
-        sqlite3_close(db);
-        return rc;
-    }
+        // Create new tables
+        const char *sql_users = "CREATE TABLE IF NOT EXISTS users ("
+                                "id INTEGER PRIMARY KEY, "
+                                "username TEXT, "
+                                "password TEXT, "
+                                "email TEXT, "
+                                "register_date TEXT, "
+                                "role TEXT);";
 
-    // Insert fake data
-    const char *sql_insert_users = "INSERT INTO users (username, password, email, register_date, role) VALUES "
-                                   "('user1', 'pass1', 'user1@example.com', '2023-01-01', 'admin'), "
-                                   "('user2', 'pass2', 'user2@example.com', '2023-01-02', 'user');";
+        const char *sql_projects = "CREATE TABLE IF NOT EXISTS projects ("
+                                   "id INTEGER PRIMARY KEY, "
+                                   "title TEXT, "
+                                   "description TEXT, "
+                                   "start_date TEXT, "
+                                   "deadline TEXT, "
+                                   "register_date TEXT, "
+                                   "leader_id INTEGER, "
+                                   "FOREIGN KEY(leader_id) REFERENCES users(id));";
 
-    rc = sqlite3_exec(db, sql_insert_users, 0, 0, &errmsg);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error inserting into users table: %s\n", errmsg);
-        sqlite3_free(errmsg);
-        sqlite3_close(db);
-        return rc;
-    }
+        const char *sql_tickets = "CREATE TABLE IF NOT EXISTS tickets ("
+                                  "id INTEGER PRIMARY KEY, "
+                                  "title TEXT, "
+                                  "description TEXT, "
+                                  "priority TEXT, "
+                                  "status TEXT, "
+                                  "owner_id INTEGER, "
+                                  "project_id INTEGER, "
+                                  "start_date TEXT, "
+                                  "deadline TEXT, "
+                                  "register_date TEXT, "
+                                  "FOREIGN KEY(owner_id) REFERENCES users(id), "
+                                  "FOREIGN KEY(project_id) REFERENCES projects(id));";
 
-    const char *sql_insert_projects = "INSERT INTO projects (title, description, start_date, deadline, register_date, leader_id) VALUES "
-                                      "('Project App', 'Description of Project 1', '2023-01-01', '2023-12-31', '2023-01-01', 1), "
-                                      "('Project 2', 'Description of Project 2', '2023-02-01', '2023-11-30', '2023-02-01', 2);";
+        const char *sql_user_projects = "CREATE TABLE IF NOT EXISTS user_projects ("
+                                        "user_id INTEGER, "
+                                        "project_id INTEGER, "
+                                        "FOREIGN KEY(user_id) REFERENCES users(id), "
+                                        "FOREIGN KEY(project_id) REFERENCES projects(id), "
+                                        "PRIMARY KEY(user_id, project_id));";
 
-    rc = sqlite3_exec(db, sql_insert_projects, 0, 0, &errmsg);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error inserting into projects table: %s\n", errmsg);
-        sqlite3_free(errmsg);
-        sqlite3_close(db);
-        return rc;
-    }
+        rc = sqlite3_exec(db, sql_users, 0, 0, &errmsg);
+        if (rc != SQLITE_OK) {
+            fprintf(stderr, "SQL error creating users table: %s\n", errmsg);
+            sqlite3_free(errmsg);
+            sqlite3_close(db);
+            return rc;
+        }
 
-    const char *sql_insert_tickets = "INSERT INTO tickets (title, description, priority, status, owner_id, project_id, start_date, deadline, register_date) VALUES "
-        "('Update contact form validation', 'Update the validation logic for the contact form fields', 'Medium', 'TODO', 3, 1, '2023-03-01', '2023-08-31', '2023-03-01'), "
-        "('Optimize database queries', 'Optimize the database queries to improve performance', 'High', 'In Progress', 4, 2, '2023-04-01', '2023-09-30', '2023-04-01'), "
-        "('Refactor user authentication', 'Refactor the user authentication module for better security', 'High', 'Pending', 5, 5, '2023-05-01', '2023-10-31', '2023-05-01'), "
-        "('Add pagination to product listing', 'Implement pagination feature for product listing page', 'Medium', 'TODO', 6, 6, '2023-06-01', '2023-11-30', '2023-06-01');";
+        rc = sqlite3_exec(db, sql_projects, 0, 0, &errmsg);
+        if (rc != SQLITE_OK) {
+            fprintf(stderr, "SQL error creating projects table: %s\n", errmsg);
+            sqlite3_free(errmsg);
+            sqlite3_close(db);
+            return rc;
+        }
 
-    rc = sqlite3_exec(db, sql_insert_tickets, 0, 0, &errmsg);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error inserting into tickets table: %s\n", errmsg);
-        sqlite3_free(errmsg);
-        sqlite3_close(db);
-        return rc;
-    }
+        rc = sqlite3_exec(db, sql_tickets, 0, 0, &errmsg);
+        if (rc != SQLITE_OK) {
+            fprintf(stderr, "SQL error creating tickets table: %s\n", errmsg);
+            sqlite3_free(errmsg);
+            sqlite3_close(db);
+            return rc;
+        }
 
-    const char *sql_insert_user_projects = "INSERT INTO user_projects (user_id, project_id) VALUES "
-                                           "(1, 1), "
-                                           "(1, 2), "
-                                           "(2, 1);";
-
-    rc = sqlite3_exec(db, sql_insert_user_projects, 0, 0, &errmsg);
-    if (rc != SQLITE_OK) {
-        fprintf(stderr, "SQL error inserting into user_projects table: %s\n", errmsg);
-        sqlite3_free(errmsg);
-        sqlite3_close(db);
-        return rc;
+        rc = sqlite3_exec(db, sql_user_projects, 0, 0, &errmsg);
+        if (rc != SQLITE_OK) {
+            fprintf(stderr, "SQL error creating user_projects table: %s\n", errmsg);
+            sqlite3_free(errmsg);
+            sqlite3_close(db);
+            return rc;
+        }
     }
 
     sqlite3_close(db);
     return SQLITE_OK;
 }
+
 
 int validate_user_credentials(const char *username, const char *password) {
     sqlite3 *db;
@@ -205,6 +339,7 @@ int validate_user_credentials(const char *username, const char *password) {
 
     return user_id;
 }
+
 Project* fetch_all_projects(int* num_projects) {
     sqlite3 *db;
     int rc;

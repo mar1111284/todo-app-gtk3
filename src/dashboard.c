@@ -110,6 +110,8 @@ void dashboard_init(GtkWidget *stack) {
     GtkBuilder *builder = gtk_builder_new();
     GError *error = NULL;
 
+    print_tickets_with_projects();
+
     if (!gtk_builder_add_from_file(builder, "ui/dashboard.ui", &error)) {
         g_warning("Error loading UI file: %s", error->message);
         g_error_free(error);

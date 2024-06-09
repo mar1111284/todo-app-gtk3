@@ -14,7 +14,9 @@
 4. **Database Implementation**
    - Integration with SQLite for storing todo items.
 
-5. **Screenshots**
+5. **Features Implementation & code**
+   - Integration of core features.
+6. **Screenshots**
 
 ### Introduction
 

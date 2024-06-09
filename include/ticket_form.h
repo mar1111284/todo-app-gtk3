@@ -18,6 +18,7 @@ typedef struct {
     GtkWidget *entry_description;
     GtkWidget *entry_priority;
     GtkWidget *entry_status;
+    GtkWidget *entry_project;
     SelectedDate start_date; // Store the selected start date
     SelectedDate deadline_date; // Store the selected deadline date
     GtkWidget *entry_owner;
@@ -25,6 +26,7 @@ typedef struct {
     GtkWidget *submit_btn;
     GtkWidget *start_date_label; // Label for displaying the start date
     GtkWidget *deadline_date_label; // Label for displaying the deadline date
+    int project_id;
 } TicketFormPage;
 
 
