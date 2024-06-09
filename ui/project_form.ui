@@ -141,8 +141,6 @@
               </packing>
             </child>
 
-
-
             <!-- Team Leader -->
             <child>
               <object class="GtkComboBoxText" id="project_leader_combobox">
