@@ -30,7 +30,7 @@
             <child>
               <object class="GtkLabel" id="page_label">
                 <property name="visible">true</property>
-                <property name="label">Create a ticket</property>
+                <property name="label">Create a project</property>
                 <property name="halign">center</property>
                 <property name="margin-bottom">20</property>
                 <property name="width-request">500</property> <!-- Increase entry width -->
@@ -47,6 +47,120 @@
                 <property name="height">1</property>
               </packing>
             </child>
+
+            <!-- Title ticket entry -->
+            <child>
+              <object class="GtkEntry" id="project_title_entry">
+                <property name="visible">True</property>
+                <property name="placeholder-text">Enter Title...</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">1</property>
+                <property name="width">6</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            
+            
+            <!-- Project Description -->
+            <child>
+              <object class="GtkScrolledWindow" id="project_description_textview_container">
+                <property name="visible">False</property>
+                <child>
+                  <object class="GtkViewport">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkTextView" id="ticket_description_textview">
+                        <property name="visible">True</property>
+                        <property name="wrap-mode">word</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <property name="min-content-height">400</property>
+                <property name="min-content-width">300</property>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">2</property>
+                <property name="width">6</property>
+                <property name="height">10</property>
+              </packing>
+            </child>
+
+            <!-- Project Start Date -->
+            <child>
+              <object class="GtkLabel" id="project_start_date_label">
+                <property name="visible">True</property>
+                <property name="label">YYYY-MM-DD</property> <!-- Set an initial label -->
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">13</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="project_start_date_button">
+                <property name="visible">True</property>
+                <property name="label">Start date</property>
+              </object>
+              <packing>
+                <property name="left_attach">2</property>
+                <property name="top_attach">13</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+
+            <!-- Project Deadline -->
+            <child>
+              <object class="GtkLabel" id="project_deadline_label">
+                <property name="visible">True</property>
+                <property name="label">YYYY-MM-DD</property> <!-- Set an initial label -->
+              </object>
+              <packing>
+                <property name="left_attach">3</property>
+                <property name="top_attach">13</property>
+                <property name="width">2</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="project_deadline_button">
+                <property name="visible">True</property>
+                <property name="label">Select Deadline</property>
+              </object>
+              <packing>
+                <property name="left_attach">5</property>
+                <property name="top_attach">13</property>
+                <property name="width">1</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
+
+
+
+            <!-- Team Leader -->
+            <child>
+              <object class="GtkComboBoxText" id="project_leader_combobox">
+                <property name="visible">True</property>
+                <items>
+                  <item id="owner1">Owner 1</item>
+                  <item id="owner2">Owner 2</item>
+                  <item id="owner3">Owner 3</item>
+                  <!-- Add more owners as needed -->
+                </items>
+              </object>
+              <packing>
+                <property name="left_attach">0</property>
+                <property name="top_attach">14</property>
+                <property name="width">3</property>
+                <property name="height">1</property>
+              </packing>
+            </child>
           
             <!-- Submit Button -->
             <child>
@@ -56,7 +170,7 @@
               </object>
               <packing>
                 <property name="left_attach">3</property>
-                <property name="top_attach">15</property>
+                <property name="top_attach">14</property>
                 <property name="width">3</property>
                 <property name="height">1</property>
               </packing>

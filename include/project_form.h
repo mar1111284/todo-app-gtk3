@@ -14,7 +14,7 @@ typedef struct {
     GtkGrid *page_grid;
     GtkWidget *page_label;
     GtkWidget *entry_title;
-    GtkWidget *ticket_description_textview_container;
+    GtkWidget *project_description_textview_container;
     GtkWidget *entry_description;
     ProjectDate start_date; // Store the selected start date
     ProjectDate deadline_date; // Store the selected deadline date
