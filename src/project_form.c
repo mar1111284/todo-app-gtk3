@@ -125,6 +125,11 @@ void project_form_init(GtkWidget *stack) {
     gtk_widget_set_name(GTK_WIDGET(project_form_page.submit_btn), "submit-btn");
     gtk_widget_set_name(GTK_WIDGET(project_form_page.project_description_textview_container), "entry-description-container");
 
+    // Create a text buffer with placeholder text for the description text view
+    GtkTextBuffer *buffer = gtk_text_buffer_new(NULL);
+    gtk_text_buffer_set_text(buffer, "Enter project description here...", -1);
+    gtk_text_view_set_buffer(GTK_TEXT_VIEW(project_form_page.entry_description), buffer);
+
 
     // Connect the start date and deadline button clicked signals to show the calendar dialog
     GtkWidget *start_date_button = GTK_WIDGET(gtk_builder_get_object(builder, "project_start_date_button"));

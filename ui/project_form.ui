@@ -71,7 +71,7 @@
                   <object class="GtkViewport">
                     <property name="visible">True</property>
                     <child>
-                      <object class="GtkTextView" id="ticket_description_textview">
+                      <object class="GtkTextView" id="project_description_textview">
                         <property name="visible">True</property>
                         <property name="wrap-mode">word</property>
                       </object>

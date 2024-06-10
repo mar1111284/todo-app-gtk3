@@ -6,20 +6,23 @@
 
 1. **Project Structure**
    - Overview of folders and files.
+
+2. **Features**
+  - Overview of the features
    
-2. **Stack Structure**
+3. **Stack Structure**
    - Usage of `GtkStack` for managing different pages.
    
-3. **Pages Structure**
+4. **Pages Structure**
    - How different pages (login, dashboard, etc.) are organized and initialized.
    
-4. **Database Implementation**
+5. **Database Implementation**
    - Integration with SQLite for storing todo items.
 
-5. **Features Implementation & code**
+6. **Function details**
    - Integration of core features.
 
-6. **Screenshots**
+7. **Screenshots**
 
 ### Introduction
 
@@ -47,6 +50,41 @@ Here is an overview of the project structure:
 ├── style.css     # CSS file for styling
 
 ```
+
+### Features
+
+
+***This project management system allows users to manage projects and tickets efficiently. Below are the detailed features and their descriptions.***
+
+#### Features: **Login System**
+
+- Users can log in using their credentials.
+- Authentication ensures only authorized access to the system.
+- Sessions are maintained to keep users logged in.
+
+#### Features: **Create a Project**
+
+- Users can create new projects.
+- Projects have attributes such as title, description, leader, start date, and deadline.
+- Projects are stored in the database.
+
+#### Features: **Create Ticket Associated with a Project**
+
+- Users can create tickets that are linked to specific projects.
+- Tickets have attributes like title, description, assigned user, priority, and status.
+- Assign Ticket to User
+- Tickets can be assigned to users.
+- Assignment ensures responsibility for task completion.
+
+#### Features: **Keep Track of Ticket Status**
+
+- Statuses include Open, In Progress, Resolved, and Closed.
+- Status updates help in tracking the progress of tasks.
+
+#### Features: **Delete or Edit Ticket**
+
+- Users can delete tickets that are no longer needed.
+- Users can edit ticket details to update information.
 
 ### Stack Structure
 
